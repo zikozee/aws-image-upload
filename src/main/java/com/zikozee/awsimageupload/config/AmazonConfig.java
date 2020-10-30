@@ -16,6 +16,7 @@ public class AmazonConfig {
         AWSCredentials awsCredentials = new BasicAWSCredentials("AKIAIIL7KYBD2EWNCK6Q", "kjEYVGU7VWclDTJIdWwPKm+SrfdlFVqt+a9W42re");
         return AmazonS3ClientBuilder
                 .standard()
+                .withRegion("us-east-2")
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
