@@ -22,6 +22,10 @@ public class UserProfileDataAccessService implements UserProfileService{
 
     @Override
     public void uploadUserProfileImage(UUID userProfileId, MultipartFile file) {
-
+        //1. Check if Image is not empty
+        //2. If file is an Image
+        //3. The user exists in our database
+        //4. Grab some metadata from file if any
+        //5. Store the image in s3 and update database (userProfileImageLink) with s3 image link
     }
 }
