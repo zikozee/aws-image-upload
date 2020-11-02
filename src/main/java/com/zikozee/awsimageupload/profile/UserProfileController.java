@@ -12,6 +12,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/user-profile")
 @RequiredArgsConstructor
+//@CrossOrigin("*") //allow anywhere
+@CrossOrigin(origins = {"http://localhost:3000"}) //allow only this guy
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
