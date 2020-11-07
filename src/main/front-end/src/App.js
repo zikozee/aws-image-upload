@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useDropzone} from 'react-dropzone'
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 
