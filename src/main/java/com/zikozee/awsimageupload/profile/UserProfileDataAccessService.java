@@ -51,6 +51,19 @@ public class UserProfileDataAccessService implements UserProfileService{
 
     }
 
+    @Override
+    public byte[] downloadUserProfileImage(UUID userProfileId) {
+        UserProfile userProfile = getUserProfileOrThrow(userProfileId);
+        String path = BucketName.PROFILE_IMAGE.getBucketName()
+                + "/" + userProfile.getUserProfileId()
+                + "/" + userProfile.getUserProfileImageLink().get();
+
+        //optional can be used as streams
+        return userProfile.getUserProfileImageLink()
+                .map(key -> fileStore.download(path, key))
+                .orElse(new byte[0]);
+    }
+
     private Map<String, String> extractMetadata(MultipartFile file) {
         Map<String, String> metadata = new HashMap<>();
         metadata.put("Content-Type", file.getContentType());

@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface FileStoreService {
 
     void save(String path, String fileName, Optional<Map<String, String>> optionalMetadata, InputStream inputStream, long contentLength);
+
+    byte[] download(String path, String key);
 }

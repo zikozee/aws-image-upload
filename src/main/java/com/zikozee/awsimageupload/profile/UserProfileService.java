@@ -12,4 +12,6 @@ public interface UserProfileService {
     List<UserProfile> getUserProfiles();
 
     void uploadUserProfileImage(UUID userProfileId, MultipartFile file);
+
+    byte[] downloadUserProfileImage(UUID userProfileId);
 }
