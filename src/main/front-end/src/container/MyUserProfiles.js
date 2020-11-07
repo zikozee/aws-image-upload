@@ -22,7 +22,7 @@ const MyUserProfiles = () => {
         return (
             <div key={index}>
                 {userProfile.userProfileId ? (
-                    <img src={`http://localhost:8089/api/v1/user-profile/${userProfile.userProfileId}/image/download`}
+                    <img src={`http://localhost:8089/api/v1/user-profile/${userProfile.userProfileId}/image/download`} alt={""}
                     />
                 ) : null }
 

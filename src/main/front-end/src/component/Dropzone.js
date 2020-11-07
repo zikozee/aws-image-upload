@@ -1,6 +1,6 @@
 import axios from "axios";
 import {useDropzone} from "react-dropzone";
-import {useCallback} from "react";
+import React, {useCallback} from 'react'
 
 function Dropzone({userProfileId}) {
     const onDrop = useCallback(acceptedFiles => {
@@ -22,7 +22,7 @@ function Dropzone({userProfileId}) {
         }).catch(err => {
             console.log(err);
         });
-    }, [])
+    },[userProfileId])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
     return (
