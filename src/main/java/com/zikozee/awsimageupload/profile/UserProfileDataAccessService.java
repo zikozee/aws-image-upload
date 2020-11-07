@@ -44,6 +44,7 @@ public class UserProfileDataAccessService implements UserProfileService{
         String fileName = file.getOriginalFilename() + "-" + UUID.randomUUID();
         try {
             fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream(), file.getSize());
+            userProfile.setUserProfileImageLink(fileName);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

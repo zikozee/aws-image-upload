@@ -2,7 +2,6 @@ package com.zikozee.awsimageupload.profile;
 
 import lombok.*;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,8 +9,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserProfile {
 
-    private UUID userProfileId;
-    private String username;
+    private final UUID userProfileId;
+    private final String username;
 
     @Getter(AccessLevel.NONE)//exclude from Getter
     private String userProfileImageLink; // S3 Key
