@@ -55,8 +55,7 @@ public class UserProfileDataAccessService implements UserProfileService{
     public byte[] downloadUserProfileImage(UUID userProfileId) {
         UserProfile userProfile = getUserProfileOrThrow(userProfileId);
         String path = BucketName.PROFILE_IMAGE.getBucketName()
-                + "/" + userProfile.getUserProfileId()
-                + "/" + userProfile.getUserProfileImageLink().get();
+                + "/" + userProfile.getUserProfileId();
 
         //optional can be used as streams
         return userProfile.getUserProfileImageLink()
