@@ -28,33 +28,53 @@ public class UserProfileDataAccessService implements UserProfileService{
     @Override
     public void uploadUserProfileImage(UUID userProfileId, MultipartFile file) {
         //1. Check if Image is not empty
-        if(file.isEmpty())
-            throw new IllegalStateException("Cannot upload empty file [ " + file.getSize() + "]");//throw custom exception
+        isFileEmpty(file);
         //2. If file is an Image
-        if(!Arrays.asList(IMAGE_JPEG, IMAGE_PNG, IMAGE_GIF).contains(file.getContentType())){
-            throw new IllegalStateException("File must be an image");
-        }
+        isImage(file);
 
         //3. The user exists in our database
-        UserProfile userProfile = getUserProfiles()
-                .stream()
-                .filter(userProf -> userProf.getUserProfileId().equals(userProfileId))
-                .findFirst().orElseThrow(() -> new IllegalStateException("User profile with id: " + userProfileId+ " not found"));
+        UserProfile userProfile = getUserProfileOrThrow(userProfileId);
 
         //4. Grab some metadata from file if any
-        Map<String, String> metadata = new HashMap<>();
-        metadata.put("Content-Type", file.getContentType());
-        metadata.put("Content-Length", String.valueOf(file.getSize()));
+        Map<String, String> metadata = extractMetadata(file);
 
         //5. Store the image in s3 and update database (userProfileImageLink) with s3 image link
         //creating a folder per user
         String path = BucketName.PROFILE_IMAGE.getBucketName() + "/" + userProfile.getUserProfileId();
-        String fileName = file.getName() + "-" + UUID.randomUUID();
+        String fileName = file.getOriginalFilename() + "-" + UUID.randomUUID();
         try {
-            fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream());
+            fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream(), file.getSize());
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+
+    }
+
+    private Map<String, String> extractMetadata(MultipartFile file) {
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("Content-Type", file.getContentType());
+        metadata.put("Content-Length", String.valueOf(file.getSize()));
+        return metadata;
+    }
+
+    private void isImage(MultipartFile file) {
+        if(!Arrays.asList(
+                IMAGE_JPEG.getMimeType(),
+                IMAGE_PNG.getMimeType(),
+                IMAGE_GIF.getMimeType()).contains(file.getContentType()))
+            throw new IllegalStateException("File must be an image [" + file.getContentType() + "]");
+    }
+
+    private void isFileEmpty(MultipartFile file) {
+        if(file.isEmpty())
+            throw new IllegalStateException("Cannot upload empty file [ " + file.getSize() + "]");//throw custom exception
+    }
+
+    private UserProfile getUserProfileOrThrow(UUID userProfileId){
+        return getUserProfiles()
+                .stream()
+                .filter(userProf -> userProf.getUserProfileId().equals(userProfileId))
+                .findFirst().orElseThrow(() -> new IllegalStateException("User profile with id: " + userProfileId+ " not found"));
 
     }
 }

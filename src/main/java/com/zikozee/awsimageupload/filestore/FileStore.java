@@ -17,9 +17,10 @@ public class FileStore implements FileStoreService{
     private final AmazonS3 s3;
 
     @Override
-    public void save(String path, String fileName, Optional<Map<String, String>> optionalMetadata, InputStream inputStream) {
+    public void save(String path, String fileName, Optional<Map<String, String>> optionalMetadata, InputStream inputStream, long contentLength) {
 
         ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(contentLength);
         optionalMetadata.ifPresent(map -> {
             if(!map.isEmpty()){
                 map.forEach(metadata::addUserMetadata);
