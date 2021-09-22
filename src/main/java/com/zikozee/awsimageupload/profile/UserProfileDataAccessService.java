@@ -30,7 +30,7 @@ public class UserProfileDataAccessService implements UserProfileService{
         //1. Check if Image is not empty
         isFileEmpty(file);
         //2. If file is an Image
-        isImage(file);
+//        isImage(file);
 
         //3. The user exists in our database
         UserProfile userProfile = getUserProfileOrThrow(userProfileId);
@@ -41,7 +41,7 @@ public class UserProfileDataAccessService implements UserProfileService{
         //5. Store the image in s3 and update database (userProfileImageLink) with s3 image link
         //creating a folder per user
         String path = BucketName.PROFILE_IMAGE.getBucketName() + "/" + userProfile.getUserProfileId();
-        String fileName = file.getOriginalFilename() + "-" + UUID.randomUUID();
+        String fileName = UUID.randomUUID()+"-" + file.getOriginalFilename();
         try {
             fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream(), file.getSize());
             userProfile.setUserProfileImageLink(fileName);
